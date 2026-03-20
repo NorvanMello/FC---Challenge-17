@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --color-green: rgba(84,230,175);
+    --color-blue-950: rgba(18,23,37);
+    --color-blue-900: rgba(44,52,75);
+    --color-blue-600: rgba(90,102,138);
+    --color-blue-300: rgba(194,203,229);
+    --color-red: rgba(251,60,60);
+    --color-white: #FFF;
+
+    --text-preset-1: 300 48px/1.2 "Chivo", "sans-serif";
+    --text-preset-2: 300 18px/1.5 "Chivo", "sans-serif";
+    --text-preset-3: 700 14px/2 "Chivo", "sans-serif";
+
+    --space-1300: 104px;
+    --space-1100: 88px;
+    --space-1000: 80px;
+    --space-800: 64px;
+    --space-700: 56px;
+    --space-500: 40px;
+    --space-400: 32px;
+    --space-300: 24px;
+    --space-200: 16px;
+    --space-100: 8px;
+    --space-50: 4px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--color-blue-950);
+}
+
+.main-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* .container {
+    background-color: var(--color-blue-950);
+    width: 1120px;
+    max-height: 654px;
+    position: relative;
+} */
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    max-width: 1120px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.left {
+    max-width: 540px;
+    width: 100%;
+    z-index: 2;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    max-width: 736px;
+    width: 100%;
+}
+
+.img-top-logo {
+    width: 135px;
+    height: 56px;
+    margin-bottom: var(--space-1300);
+}
+
+.description {
+    background: var(--color-blue-950);
+    padding: var(--space-1100) var(--space-800) 0 0;
+    display: inline-block;
+    width: 46rem;
+    /* width: 100%; */
+    z-index: 2;
+}
+
+.description h2 {
+    color: var(--color-green);
+    font: var(--text-preset-1);
+    margin: 0
+}
+
+.description h2 span {
+    color: var(--color-white);
+}
+
+.description p {
+    color: var(--color-blue-300);
+    font: var(--text-preset-2);
+    max-width: 448px;
+    width: 100%;
+    margin: var(--space-300) 0 0;
+}
+
+.input-group {
+    position: relative;
+    max-width: 448px;
+    width: 100%;
+
+}
+
+.form input{
+    background: var(--color-blue-900);
+    border-radius: 999px;
+    border: none;
+    width: 100%;
+    padding: var(--space-200) var(--space-300);
+    margin: var(--space-500) 0;
+    
+}
+
+.form input.invalid-email {
+    border: 1.5px solid red;
+}
+
+.form input::placeholder {
+    color: var(--color-white);
+    opacity: 50%;
+    font: var(--text-preset-3);
+}
+
+.input-group button {
+    position:absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: var(--space-100) var(--space-400);
+
+    border-radius: 999px;
+    border: none;
+
+    color: var(--color-blue-950);
+    font: var(--text-preset-3);
+
+    background: var(--color-green);
+}
+
+.input-group button:hover {
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), var(--color-green) ;
+}
+
+.logos {
+    padding-top: var(--space-300);
+    display: flex;
+    gap: var(--space-500);
+    max-width: 548px;
+    width: 100%;
+}
+
+.right {
+    transform: translateX(-50px);
+    position: relative;
+}
+
+.host-img {
+   width: 960px;
+    height: 645px;
+    display: block;
+}
+
+.img-dots {
+    position: absolute;
+    right: 4rem;
+    bottom: -52px;
+    width: 232px;
+    height: 104px;
+    z-index: 3;
+}
+
+/* .right .img-dots {
+    width: 232px;
+    height: 104px;
+    display: flex;
+    justify-content: end;
+} */
