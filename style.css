@@ -121,11 +121,27 @@ body {
     width: 100%;
     padding: var(--space-200) var(--space-300);
     margin: var(--space-500) 0;
+
+    font: var(--text-preset-3);
+    color: var(--color-white);
     
 }
 
 .form input.invalid-email {
-    border: 1.5px solid red;
+    border: 1.5px solid var(--color-red);
+}
+
+.form .invalid-paragraph {
+    font: var(--text-preset-3);
+    font-size: 12px;
+    color: var(--color-red);
+    
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 7rem;
+    margin: 0;
+    padding: 0;
 }
 
 .form input::placeholder {
@@ -168,8 +184,9 @@ body {
 }
 
 .host-img {
-   width: 960px;
-    height: 645px;
+    width: 960px;
+    max-height: 660px;
+    height: 100%;
     display: block;
 }
 
@@ -180,6 +197,18 @@ body {
     width: 232px;
     height: 104px;
     z-index: 3;
+}
+
+
+/* Remove autofill from all states*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-blue-900) inset;
+  -webkit-text-fill-color: #fff;
+  caret-color: #fff;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* .right .img-dots {
