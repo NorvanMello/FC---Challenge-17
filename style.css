@@ -124,7 +124,6 @@ body {
 
     font: var(--text-preset-3);
     color: var(--color-white);
-    
 }
 
 .form input.invalid-email {
@@ -217,3 +216,710 @@ input:-webkit-autofill:active {
     display: flex;
     justify-content: end;
 } */
+
+@media (max-width:768px) {
+    .content {
+        width: 592px;
+        max-height: 712px;
+        height: 100%;
+
+    }
+
+    .description {
+        width: 100%;
+    }
+
+
+    .host-img {
+        width: 460px;
+        height: 868px;
+        position: relative;
+        right: 9rem;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        margin: 0;
+    }
+
+     .main-content {
+        background-image: url("./assets/mobile/image-host.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        position: relative;
+
+        /*
+        Because ::before needs a positioning reference.
+
+        Right now you wrote:
+
+        .main-content::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--color-blue-950);
+            opacity: 70%;
+        }
+
+        But your .main-content does not have:
+
+        position: relative;
+
+        So the pseudo-element is not being anchored correctly to .main-content.
+
+        */
+        padding: var(--space-500);
+    }
+
+    .main-content::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--color-blue-950);
+        opacity: 70%;
+    }
+
+    .container,
+    .left,
+    .content,
+    .description {
+        max-width: none;
+        width: 100%;
+        
+    }
+
+    .container {
+        min-height: 100vh;
+    }
+
+    .content {
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .description {
+        background: none;
+        padding: 0;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    .description h2 {
+        text-align: center;
+    }
+
+    .description p {
+        text-align: center;
+        max-width: 504px;
+        width: 100%;
+    }
+
+    .logos {
+        width: 100%;
+        justify-content: center;
+        gap: var(--space-300);
+        padding-top: 0;
+        margin-top: var(--space-500);
+        order: 3;
+    }
+
+    .form {
+        order: 4;
+        display: block;
+    }
+
+    .input-group {
+        max-width: none;
+        width: 100%; 
+    }
+
+    .input-group button {
+        position: static;
+        transform: none;
+        width: 100%;
+        margin-top: var(--space-200);
+        padding: var(--space-200) var(--space-300);
+    }
+
+    .form input {
+        margin: var(--space-500) 0 0;
+    }
+
+    .right {
+        display: none;
+    }
+    
+    .form .invalid-paragraph {
+        position: absolute;
+        top: calc(100% + 0.75rem);
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-weight: bolder;
+        color: var(--color-red);
+        font-size: 12px;
+    }
+}
+
+
+/*
+What happened here is that on mobile you were no longer just “resizing” the desktop layout. You were changing the layout behavior.
+
+That is one of the biggest lessons in responsive CSS:
+
+Desktop and mobile often do not use the same layout logic.
+
+On desktop, your form button was visually inside the input. On mobile, the button becomes a full-width block below the input. Also, the logos needed to move above the form. That required changing not only sizes, but also structure behavior.
+
+1. This part changes .description into a flex container
+.description {
+    background: none;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+Let’s break it down.
+
+background: none;
+
+On desktop, .description had a dark background block behind the text. On mobile, your background image already covers the full section, so keeping that desktop background would create an extra box on top of the image.
+
+So this line says:
+
+“Remove the desktop background block.”
+
+padding: 0;
+
+On desktop, .description had internal spacing to create the overlapping dark box look. On mobile, that spacing would make the content feel boxed in and misaligned.
+
+So this line says:
+
+“Reset the desktop internal spacing because mobile needs a cleaner layout.”
+
+display: flex;
+
+This is the big one.
+
+Before this, .description behaved like a normal block container. Its children appeared in normal document order:
+
+h2
+
+p
+
+.form
+
+.logos
+
+When you write:
+
+display: flex;
+
+you are saying:
+
+“Now I want .description to control how its direct children are arranged.”
+
+So .description becomes a flex container.
+
+Its direct children become flex items.
+
+Those direct children are:
+
+h2
+
+p
+
+.form
+
+.logos
+
+flex-direction: column;
+
+By default, flex puts children in a row.
+
+So:
+
+display: flex;
+
+alone would try to place them side by side horizontally.
+
+But you want them stacked vertically.
+
+So:
+
+flex-direction: column;
+
+means:
+
+“Arrange my children from top to bottom.”
+
+That gives you a vertical layout, but now with flex powers.
+
+And one of those powers is order.
+
+That is why this line was essential.
+
+Without display: flex, order does nothing.
+
+2. Centering the heading and paragraph
+.description h2 {
+    text-align: center;
+}
+
+.description p {
+    text-align: center;
+}
+
+This does not move the element itself. It changes how the text inside the element is aligned.
+
+This is a super important distinction.
+
+text-align: center;
+
+This means:
+
+“Center the inline content inside this box.”
+
+For example, in h2, the words are centered inside the heading box.
+
+It does not mean:
+
+center the entire <h2> element in the page
+
+center the box itself with flexbox
+
+It only affects the text content.
+
+So if the heading takes up the full width, the text will sit in the middle of that width.
+
+Same logic for the paragraph.
+
+That is why your mobile text became visually centered.
+
+3. Reordering the logos
+.logos {
+    width: 100%;
+    justify-content: center;
+    gap: var(--space-300);
+    padding-top: var(--space-500);
+    margin-top: var(--space-500);
+    order: 3;
+}
+
+This block does several jobs.
+
+width: 100%;
+
+This tells .logos:
+
+“Take the full available width of the parent.”
+
+Why is that useful?
+
+Because if the logos row is full width, then centering inside it becomes easier and more predictable.
+
+Without width: 100%, the logos container might only be as wide as its content, and centering behavior can look less obvious.
+
+justify-content: center;
+
+This only works because .logos was already display: flex in your base CSS:
+
+.logos {
+    display: flex;
+}
+
+So here, justify-content: center; means:
+
+“Center the flex items horizontally inside the logos row.”
+
+That centers the logo images across the row.
+
+gap: var(--space-300);
+
+This controls the space between the flex items.
+
+So instead of using margin on each logo, gap says:
+
+“Put consistent spacing between all logo items.”
+
+That’s a cleaner flexbox approach.
+
+padding-top: var(--space-500);
+
+This adds inner space above the content of .logos.
+
+It pushes the logos down from the top edge of their own box.
+
+margin-top: var(--space-500);
+
+This adds outer space above .logos, separating it from the element before it.
+
+This is the difference:
+
+padding-top = space inside the logos box
+
+margin-top = space outside the logos box
+
+In your case, using both may be more than needed, but visually it can help while you experiment.
+
+A cleaner version later might use only one of them.
+
+order: 3;
+
+This is the most important line here.
+
+Because .description is now a flex container, all its direct children can be reordered.
+
+By default, flex items have:
+
+order: 0;
+
+When you assign:
+
+.logos {
+    order: 3;
+}
+
+you are saying:
+
+“Place the logos later in the sequence.”
+
+But order only matters relative to the other siblings.
+
+Since you gave .form order: 4, the browser compares the values:
+
+.logos → 3
+
+.form → 4
+
+So .logos comes before .form.
+
+That is how you changed the visual order without changing the HTML.
+
+4. Reordering the form
+.form {
+    order: 4;
+    display: block;
+}
+order: 4;
+
+This says:
+
+“Place .form after items with lower order values.”
+
+So if .logos is 3, the form goes below it.
+
+That is why your mobile order changed to:
+
+heading
+
+paragraph
+
+logos
+
+form
+
+even though the HTML still had form before logos.
+
+This is one of the most powerful flexbox features.
+
+display: block;
+
+In your mobile CSS, earlier you had hidden the form with:
+
+.form {
+    display: none;
+}
+
+So now you need to show it again.
+
+display: block; means:
+
+“Render this element as a block-level element.”
+
+So this line is not really about layout sophistication here. It is mainly:
+
+“Show the form again.”
+
+5. Making the input wrapper fill the available width
+.input-group {
+    max-width: none;
+    width: 100%; 
+}
+
+On desktop, your input group had a max width so it did not get too wide.
+
+That made sense for desktop.
+
+But on mobile, you want the form to stretch across the usable width.
+
+max-width: none;
+
+This removes any width cap.
+
+It says:
+
+“Do not limit this box to a maximum width.”
+
+width: 100%;
+
+This says:
+
+“Take all the available width from the parent.”
+
+Together, these two lines say:
+
+“On mobile, let the input group be fully fluid.”
+
+That is why the input can stretch nicely across the screen.
+
+6. Resetting the button’s desktop positioning
+.input-group button {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin-top: var(--space-200);
+    padding: var(--space-200) var(--space-300);
+}
+
+This is a very important responsive concept: sometimes you must undo desktop tricks.
+
+On desktop, your button used:
+
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+
+That worked because the design wanted the button visually inside the input.
+
+But mobile uses a different pattern:
+
+input on one row
+
+button below it
+
+So you have to remove that desktop behavior.
+
+position: static;
+
+This resets the button to normal document flow.
+
+static is the default position value.
+
+It means:
+
+“Stop floating me. Put me back into the normal layout.”
+
+This is huge.
+
+Because on desktop the button was absolutely positioned and removed from normal flow.
+
+On mobile, position: static makes it behave like a normal block element again.
+
+transform: none;
+
+On desktop, you used:
+
+transform: translateY(-50%);
+
+That visually moved the button upward to center it inside the input.
+
+But once the button is back in normal flow, that transform is no longer needed.
+
+So:
+
+“Remove any visual shift from desktop.”
+
+width: 100%;
+
+This tells the button:
+
+“Stretch to the full width of the form area.”
+
+That creates the full-width mobile CTA look.
+
+margin-top: var(--space-200);
+
+This adds vertical space between the input and the button.
+
+Since the button is now below the input, this creates the gap between them.
+
+padding: var(--space-200) var(--space-300);
+
+This gives the button its internal size:
+
+top/bottom padding
+
+left/right padding
+
+That defines its height and horizontal breathing room.
+
+7. Adjusting the input margin
+.form input {
+    margin: var(--space-500) 0 0;
+}
+
+This is shorthand for:
+
+margin-top: var(--space-500);
+margin-right: 0;
+margin-bottom: 0;
+margin-left: 0;
+
+So this means:
+
+“Give the input space above it, but no space below.”
+
+Why no space below?
+
+Because now the space below is handled by the button’s margin-top.
+
+This is a good example of separating responsibilities:
+
+input handles its space above
+
+button handles its space from the input
+
+That gives you more control.
+
+The big lesson behind all of this
+
+You did not just “style mobile.”
+
+You changed:
+
+the parent layout model
+
+the order of elements
+
+the width behavior
+
+the button positioning logic
+
+That is advanced responsive thinking.
+
+Why order only worked after display: flex
+
+This is worth repeating because it is the key breakthrough.
+
+order is a flexbox property.
+
+It only works on flex items.
+
+An element becomes a flex item only when its parent has:
+
+display: flex;
+
+So before this:
+
+.description {
+    display: inline-block;
+}
+
+the children were just normal block elements. order had no meaning.
+
+After this:
+
+.description {
+    display: flex;
+    flex-direction: column;
+}
+
+the children became flex items, and now order works.
+
+That is why the fix felt magical.
+
+But it was actually logical:
+
+parent becomes flex container
+
+children become flex items
+
+flex properties start working
+
+A very useful mental model
+
+When you write responsive CSS, ask yourself these questions:
+
+1. Is the mobile layout just a smaller version?
+
+If yes, maybe you only need smaller widths and font sizes.
+
+2. Or does the layout logic change?
+
+If yes, you may need to:
+
+reset position
+
+change display
+
+reorder items
+
+change alignment strategy
+
+In your case, the layout logic changed.
+
+So your mobile CSS needed to be more than just scaling.
+
+Super short summary of each rule
+.description {
+    display: flex;
+    flex-direction: column;
+}
+
+Turns .description into a vertical flex container so order can work.
+
+.description h2,
+.description p {
+    text-align: center;
+}
+
+Centers the text inside those elements.
+
+.logos {
+    width: 100%;
+    justify-content: center;
+    gap: ...;
+    order: 3;
+}
+
+Makes the logos row full width, centers the logos, adds spacing, and places it before the form.
+
+.form {
+    order: 4;
+    display: block;
+}
+
+Shows the form again and places it after the logos.
+
+.input-group {
+    max-width: none;
+    width: 100%;
+}
+
+Lets the input/button area stretch fully on mobile.
+
+.input-group button {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin-top: ...;
+}
+
+Removes the desktop “button inside input” logic and turns it into a normal full-width mobile button.
+
+.form input {
+    margin: ...;
+}
+
+Adjusts the input spacing for the mobile layout.
+
+You made a real step here. This is exactly the kind of thing that starts turning CSS from “trying properties” into “understanding layout systems.”
+
+*/
